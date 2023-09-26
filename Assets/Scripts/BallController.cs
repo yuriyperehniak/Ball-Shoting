@@ -1,8 +1,11 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    public float spawnSpeed = 10f;
+    public float spawnSpeed = 15f;
+    public float decreaseSpeed = 5f;
     public float moveSpeed = 30f;
     public GameObject objectPrefab;
 
@@ -13,8 +16,8 @@ public class BallController : MonoBehaviour
 
     private Vector3 _originalScale;
     private Vector3 _cloneScale;
-    private bool _isTouching;
     private Rigidbody _rigidbody;
+    private bool _isTouching;
     private bool _isRigidbodyNotNull;
     private bool _isCloneNull;
 
@@ -76,8 +79,8 @@ public class BallController : MonoBehaviour
             spawnSpeed * Time.deltaTime);
         _cloneTransform.localScale = _cloneScale;
 
-        _originalScale -= new Vector3(spawnSpeed * Time.deltaTime, spawnSpeed * Time.deltaTime,
-            spawnSpeed * Time.deltaTime);
+        _originalScale -= new Vector3(decreaseSpeed * Time.deltaTime, decreaseSpeed * Time.deltaTime,
+            decreaseSpeed * Time.deltaTime);
         _originalTransform.localScale = _originalScale;
     }
 
