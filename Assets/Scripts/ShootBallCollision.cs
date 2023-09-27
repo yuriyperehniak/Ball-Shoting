@@ -1,10 +1,10 @@
-﻿using System;
-using Unity.VisualScripting;
+﻿using Unity.VisualScripting;
 using UnityEngine;
 
-public class CloneBallCollision : MonoBehaviour
+public class ShootBallCollision : MonoBehaviour
 {
     public float infectionMultiplier = 3f;
+    public GameObject explosionPrefab;
     private Transform _shootBall;
 
     private void Start()
@@ -16,11 +16,16 @@ public class CloneBallCollision : MonoBehaviour
     {
         var collisionGameObject = collision.gameObject;
 
-        if (!collisionGameObject.CompareTag("Obstacle")) return;
-
-        InfectionObstacles();
         
-        Destroy(gameObject);
+        if (collisionGameObject.CompareTag("Obstacle"))
+        {
+            Destroy(gameObject);
+            InfectionObstacles();    
+        }
+        else if (collisionGameObject.CompareTag("Cube"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void InfectionObstacles()
@@ -33,8 +38,10 @@ public class CloneBallCollision : MonoBehaviour
         foreach (var colliderInRadius in infectionsObstacles)
         {
             if (!colliderInRadius.CompareTag("Obstacle")) return;
-            var destroyGameObject= colliderInRadius.GameObject();
-            Destroy(destroyGameObject);
+            var infectionGameObject = colliderInRadius.GameObject();
+            var infectionTransform = infectionGameObject.GetComponent<Transform>();
+            Instantiate(explosionPrefab, infectionTransform.position, Quaternion.identity);
+            Destroy(infectionGameObject);
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
@@ -10,20 +8,20 @@ public class BallController : MonoBehaviour
     public GameObject objectPrefab;
 
     private Transform _originalTransform;
-    private Transform _cloneTransform;
-    private GameObject _clone;
+    private Transform _shootingBallTransform;
+    private GameObject _shootingBall;
     private Camera _mainCamera;
 
     private Vector3 _originalScale;
-    private Vector3 _cloneScale;
+    private Vector3 _shootingBallScale;
     private Rigidbody _rigidbody;
     private bool _isTouching;
     private bool _isRigidbodyNotNull;
-    private bool _isCloneNull;
+    private bool _isShootingBallNull;
 
     private void Start()
     {
-        _isCloneNull = _clone == null;
+        _isShootingBallNull = _shootingBall == null;
         _mainCamera = Camera.main;
         _originalTransform = transform;
 
@@ -46,9 +44,9 @@ public class BallController : MonoBehaviour
             }
             else
             {
-                if (_isCloneNull)
+                if (_isShootingBallNull)
                 {
-                    SpawnBallClone();
+                    SpawnShootingBall();
                 }
 
                 _isTouching = true;
@@ -59,25 +57,25 @@ public class BallController : MonoBehaviour
         ResizeBall();
     }
     
-    private void SpawnBallClone()
+    private void SpawnShootingBall()
     {
-        var cloneRenderer = objectPrefab.GetComponent<Renderer>();
-        var cloneHeight = cloneRenderer.bounds.size.y;
+        var shootingBallRenderer = objectPrefab.GetComponent<Renderer>();
+        var shootingBallHeight = shootingBallRenderer.bounds.size.y;
 
-        var yPos = cloneHeight * 0.5f;
-        _clone = Instantiate(objectPrefab, new Vector3(0f, yPos, 7f), Quaternion.identity);
+        var yPos = shootingBallHeight * 0.5f;
+        _shootingBall = Instantiate(objectPrefab, new Vector3(0f, yPos, 7f), Quaternion.identity);
 
-        _cloneTransform = _clone.GetComponent<Transform>();
-        _cloneScale = Vector3.zero;
-        _rigidbody = _clone.GetComponent<Rigidbody>();
+        _shootingBallTransform = _shootingBall.GetComponent<Transform>();
+        _shootingBallScale = Vector3.zero;
+        _rigidbody = _shootingBall.GetComponent<Rigidbody>();
         _isRigidbodyNotNull = _rigidbody != null;
     }
 
     private void ResizeBall()
     {
-        _cloneScale += new Vector3(spawnSpeed * Time.deltaTime, spawnSpeed * Time.deltaTime,
+        _shootingBallScale += new Vector3(spawnSpeed * Time.deltaTime, spawnSpeed * Time.deltaTime,
             spawnSpeed * Time.deltaTime);
-        _cloneTransform.localScale = _cloneScale;
+        _shootingBallTransform.localScale = _shootingBallScale;
 
         _originalScale -= new Vector3(decreaseSpeed * Time.deltaTime, decreaseSpeed * Time.deltaTime,
             decreaseSpeed * Time.deltaTime);
