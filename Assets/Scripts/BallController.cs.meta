@@ -3,7 +3,9 @@ guid: e69c7d9bdfb42214fa12fbcdea554a5d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - objectPrefab: {fileID: 5295405445144024643, guid: 0da6b9949caa4004a98fa6c5db90327c, type: 3}
+  - gameOverPanel: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

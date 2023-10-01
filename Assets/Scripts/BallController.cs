@@ -6,6 +6,7 @@ public class BallController : MonoBehaviour
     public float decreaseSpeed = 5f;
     public float moveSpeed = 30f;
     public GameObject objectPrefab;
+    public GameObject gameOverPanel;
 
     private Transform _originalTransform;
     private Transform _shootingBallTransform;
@@ -13,6 +14,7 @@ public class BallController : MonoBehaviour
     private Camera _mainCamera;
 
     private Vector3 _originalScale;
+    private Vector3 _originalStartScale;
     private Vector3 _shootingBallScale;
     private Rigidbody _rigidbody;
     private bool _isTouching;
@@ -21,15 +23,19 @@ public class BallController : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1;
         _isShootingBallNull = _shootingBall == null;
         _mainCamera = Camera.main;
         _originalTransform = transform;
 
         _originalScale = _originalTransform.localScale;
+        _originalStartScale = _originalScale;
     }
 
     private void Update()
     {
+        MinimalCriticalSize();
+
         if (Input.touchCount > 0)
         {
             var touch = Input.GetTouch(0);
@@ -56,7 +62,7 @@ public class BallController : MonoBehaviour
         if (!_isTouching) return;
         ResizeBall();
     }
-    
+
     private void SpawnShootingBall()
     {
         var shootingBallRenderer = objectPrefab.GetComponent<Renderer>();
@@ -88,5 +94,21 @@ public class BallController : MonoBehaviour
         {
             _rigidbody.AddForce(0, 0, moveSpeed, ForceMode.Impulse);
         }
+    }
+
+    private void MinimalCriticalSize()
+    {
+        var minimalScale = _originalStartScale.x/5;
+        var scale = _originalScale.x;
+        if (scale < minimalScale)
+        {
+            GameOverAction();
+        }
+    }
+
+    private void GameOverAction()
+    {
+        gameOverPanel.SetActive(true);
+        Time.timeScale = 0;
     }
 }
