@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class BallController : MonoBehaviour
 {
@@ -6,20 +7,28 @@ public class BallController : MonoBehaviour
     public float decreaseSpeed = 5f;
     public float moveSpeed = 30f;
     public GameObject objectPrefab;
-    public GameObject gameOverPanel;
 
     private Transform _originalTransform;
     private Transform _shootingBallTransform;
     private GameObject _shootingBall;
     private Camera _mainCamera;
 
-    private Vector3 _originalScale;
-    private Vector3 _originalStartScale;
+    private Vector3 _directionToMove;
+    public Vector3 originalScale;
+    public Vector3 originalStartScale;
     private Vector3 _shootingBallScale;
     private Rigidbody _rigidbody;
+    private RaycastHit _hit;
     private bool _isTouching;
     private bool _isRigidbodyNotNull;
     private bool _isShootingBallNull;
+    private bool _hasReachedTarget;
+    private readonly GameManager _gameManager;
+
+    public BallController()
+    {
+        _gameManager = new GameManager(this);
+    }
 
     private void Start()
     {
@@ -28,13 +37,13 @@ public class BallController : MonoBehaviour
         _mainCamera = Camera.main;
         _originalTransform = transform;
 
-        _originalScale = _originalTransform.localScale;
-        _originalStartScale = _originalScale;
-    }
+        originalScale = _originalTransform.localScale;
+        originalStartScale = originalScale;
+     }
 
     private void Update()
     {
-        MinimalCriticalSize();
+        _gameManager.MinimalCriticalSize();
 
         if (Input.touchCount > 0)
         {
@@ -83,9 +92,9 @@ public class BallController : MonoBehaviour
             spawnSpeed * Time.deltaTime);
         _shootingBallTransform.localScale = _shootingBallScale;
 
-        _originalScale -= new Vector3(decreaseSpeed * Time.deltaTime, decreaseSpeed * Time.deltaTime,
+        originalScale -= new Vector3(decreaseSpeed * Time.deltaTime, decreaseSpeed * Time.deltaTime,
             decreaseSpeed * Time.deltaTime);
-        _originalTransform.localScale = _originalScale;
+        _originalTransform.localScale = originalScale;
     }
 
     private void ShootingBall()
@@ -94,21 +103,5 @@ public class BallController : MonoBehaviour
         {
             _rigidbody.AddForce(0, 0, moveSpeed, ForceMode.Impulse);
         }
-    }
-
-    private void MinimalCriticalSize()
-    {
-        var minimalScale = _originalStartScale.x/5;
-        var scale = _originalScale.x;
-        if (scale < minimalScale)
-        {
-            GameOverAction();
-        }
-    }
-
-    private void GameOverAction()
-    {
-        gameOverPanel.SetActive(true);
-        Time.timeScale = 0;
     }
 }
