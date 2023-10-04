@@ -7,7 +7,7 @@ TagManager:
   - Obstacle
   - Cube
   - Door
-  - Shoot
+  - Ground
   layers:
   - Default
   - TransparentFX
