@@ -16,7 +16,6 @@ public class ShootBallCollision : MonoBehaviour
     {
         var collisionGameObject = collision.gameObject;
 
-        
         if (collisionGameObject.CompareTag("Obstacle"))
         {
             Destroy(gameObject);

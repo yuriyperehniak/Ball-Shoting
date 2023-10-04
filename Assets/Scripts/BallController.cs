@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class BallController : MonoBehaviour
 {
@@ -7,6 +6,7 @@ public class BallController : MonoBehaviour
     public float decreaseSpeed = 5f;
     public float moveSpeed = 30f;
     public GameObject objectPrefab;
+    public GameObject gameManager;
 
     private Transform _originalTransform;
     private Transform _shootingBallTransform;
@@ -23,28 +23,21 @@ public class BallController : MonoBehaviour
     private bool _isRigidbodyNotNull;
     private bool _isShootingBallNull;
     private bool _hasReachedTarget;
-    private readonly GameManager _gameManager;
-
-    public BallController()
-    {
-        _gameManager = new GameManager(this);
-    }
+    private GameManager _gameManager;
 
     private void Start()
     {
         Time.timeScale = 1;
-        _isShootingBallNull = _shootingBall == null;
         _mainCamera = Camera.main;
         _originalTransform = transform;
+        _gameManager = gameManager.GetComponent<GameManager>();
 
         originalScale = _originalTransform.localScale;
         originalStartScale = originalScale;
-     }
+    }
 
     private void Update()
-    {
-        _gameManager.MinimalCriticalSize();
-
+    {        
         if (Input.touchCount > 0)
         {
             var touch = Input.GetTouch(0);
@@ -59,17 +52,14 @@ public class BallController : MonoBehaviour
             }
             else
             {
-                if (_isShootingBallNull)
-                {
-                    SpawnShootingBall();
-                }
-
+                SpawnShootingBall();
                 _isTouching = true;
             }
         }
 
         if (!_isTouching) return;
         ResizeBall();
+        _gameManager.MinimalCriticalSize();
     }
 
     private void SpawnShootingBall()
@@ -103,5 +93,13 @@ public class BallController : MonoBehaviour
         {
             _rigidbody.AddForce(0, 0, moveSpeed, ForceMode.Impulse);
         }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        var collisionGameObject = collision.gameObject;
+
+        if (!collisionGameObject.CompareTag("Door")) return;
+        _gameManager.WinGameActions();
     }
 }

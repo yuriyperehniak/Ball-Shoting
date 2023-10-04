@@ -1,23 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class GameManager
+public class GameManager : MonoBehaviour
 {
-    private readonly BallController _ballController;
     public GameObject gameOverPanel;
+    public GameObject winGamePanel;
+    public GameObject ball;
 
-    public GameManager(BallController ballController)
-    {
-        _ballController = ballController;
-    }
+    private bool _winningConditions;
+    private BallController _ballController;
 
-    public void MinimalCriticalSize()
+    private void Start()
     {
-        var minimalScale = _ballController.originalStartScale.x/5;
-        var scale = _ballController.originalScale.x;
-        if (scale < minimalScale)
-        {
-            GameOverAction();
-        }
+        _ballController = ball.GetComponent<BallController>();
     }
 
     private void GameOverAction()
@@ -25,4 +20,21 @@ public class GameManager
         gameOverPanel.SetActive(true);
         Time.timeScale = 0;
     }
-}
+
+
+    public void WinGameActions()
+    {
+        winGamePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void MinimalCriticalSize()
+    {
+        var minimalScale = _ballController.originalStartScale.x / 5;
+        var scale = _ballController.originalScale.x;
+        if (scale < minimalScale)
+        {
+            GameOverAction();
+        }
+    }
+ }

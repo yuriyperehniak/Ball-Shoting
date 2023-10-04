@@ -1,3 +1,13 @@
-﻿fileFormatVersion: 2
+fileFormatVersion: 2
 guid: 9d2f893dc3a8456596e56a4f6a4334a3
-timeCreated: 1696247431
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - gameOverPanel: {fileID: 6533390890939676129, guid: 43312e676e83b4843b9e84285f5814d1, type: 3}
+  - winGamePanel: {fileID: 4324933349048635401, guid: 347132f9b3d1dfa4e8a21440c3c33895, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
